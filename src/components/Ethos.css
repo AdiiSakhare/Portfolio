@@ -1,0 +1,54 @@
+/* Figma: Desktop 26:182 / Tablet 26:345 / Phone 26:542 */
+.ethos-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding-block: 80px;
+}
+
+.ethos-label {
+  width: 100%;
+  font-weight: 300;
+  font-size: 26px;
+  color: var(--color-text-muted);
+  /* The label has two spaces before the emoji in the design. */
+  white-space: pre-wrap;
+}
+
+.ethos-quote {
+  width: 100%;
+  font-weight: 500;
+  font-size: 48px;
+  color: #000000;
+}
+
+@media (max-width: 1199px) {
+  .ethos-section {
+    gap: 0;
+    padding-block: 60px;
+  }
+
+  .ethos-label {
+    font-size: 22px;
+  }
+
+  .ethos-quote {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ethos-section {
+    padding-block: 32px;
+  }
+
+  .ethos-label {
+    font-size: 16px;
+  }
+
+  .ethos-quote {
+    font-size: 22px;
+  }
+}

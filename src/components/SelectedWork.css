@@ -1,0 +1,186 @@
+/* Figma: Desktop 26:117 / Tablet 26:314 / Phone 26:511 */
+.selected-work-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding-block: 80px;
+}
+
+.selected-work-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.selected-work-heading {
+  width: 100%;
+  font-weight: 600;
+  font-size: 32px;
+  color: var(--color-heading-slate);
+}
+
+.selected-work-subheading {
+  width: 100%;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--color-subheading-blue);
+}
+
+.project-list {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.project-list-item {
+  flex: 1 0 0;
+  min-width: 1px;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: clip;
+  border-radius: 16px;
+  background: var(--color-card-surface);
+}
+
+.project-image {
+  width: 100%;
+  aspect-ratio: 1024 / 640;
+  height: auto;
+  object-fit: cover;
+}
+
+.project-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  padding: 20px;
+}
+
+.project-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.project-title {
+  width: 100%;
+  font-weight: 500;
+  font-size: 26px;
+  color: var(--project-accent);
+}
+
+.project-description {
+  width: 100%;
+  font-size: 16px;
+  color: var(--color-neutral-70);
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.project-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 16px;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.project-tag--pink {
+  background: var(--color-tag-pink-background);
+  box-shadow: inset 0 0 0 1px var(--color-tag-pink-border);
+  color: var(--color-tag-pink-text);
+}
+
+.project-tag--green {
+  background: var(--color-tag-green-background);
+  box-shadow: inset 0 0 0 1px var(--color-tag-green-border);
+  color: var(--color-tag-green-text);
+}
+
+.project-tag--yellow {
+  background: var(--color-tag-yellow-background);
+  box-shadow: inset 0 0 0 1px var(--color-tag-yellow-border);
+  color: var(--color-tag-yellow-text);
+}
+
+@media (max-width: 1199px) {
+  .selected-work-section {
+    padding-block: 40px;
+  }
+
+  .selected-work-heading {
+    font-size: 26px;
+  }
+
+  .selected-work-subheading {
+    font-size: 14px;
+  }
+
+  .project-list {
+    gap: 40px;
+  }
+
+  .project-content {
+    padding: 16px;
+  }
+
+  .project-title {
+    font-size: 20px;
+  }
+
+  .project-description {
+    font-size: 14px;
+  }
+}
+
+/* Phone: the two cards stack. */
+@media (max-width: 767px) {
+  .selected-work-heading {
+    font-size: 24px;
+  }
+
+  .project-list {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .project-list-item {
+    flex: none;
+    width: 100%;
+  }
+
+  .project-title {
+    font-size: 18px;
+  }
+
+  .project-description {
+    font-size: 13px;
+    /* Figma rounds this line height to 20px. */
+    line-height: 20px;
+  }
+
+  .project-tag {
+    font-size: 12px;
+  }
+}

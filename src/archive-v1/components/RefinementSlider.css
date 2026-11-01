@@ -1,0 +1,205 @@
+.refinement {
+  margin-top: clamp(4rem, 8vw, 7rem);
+}
+
+.refinement-header {
+  margin-bottom: 1.5rem;
+}
+
+.refinement-heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.refinement-subheading {
+  margin-top: 0.4rem;
+  color: var(--color-ink-soft);
+}
+
+.refinement-slider {
+  --split: 50;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--card-radius);
+  background: var(--color-surface);
+  aspect-ratio: 16 / 9;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.refinement-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.refinement-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* The refined screen sits on top and is revealed from the divider to the right edge. */
+.refinement-layer--refined {
+  clip-path: inset(0 0 0 calc(var(--split) * 1%));
+}
+
+.refinement-label {
+  position: absolute;
+  top: 1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.refinement-label--draft {
+  left: 1rem;
+}
+
+.refinement-label--refined {
+  right: 1rem;
+}
+
+.refinement-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--split) * 1%);
+  width: 2px;
+  background: var(--color-ink);
+  transform: translateX(-1px);
+  pointer-events: none;
+}
+
+.refinement-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  transform: translate(-50%, -50%);
+}
+
+/* Invisible, but covers the whole slider so dragging works from anywhere. */
+.refinement-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+
+.refinement-slider:has(.refinement-range:focus-visible) {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.refinement-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem 2rem;
+  margin-top: 1.5rem;
+  color: var(--color-ink-soft);
+  font-size: 0.9375rem;
+}
+
+.refinement-note-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--color-ink);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+/* Local-development placeholder screens */
+.placeholder-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.9rem;
+  height: 100%;
+  padding: 0 14%;
+  background: var(--color-surface);
+}
+
+.placeholder-block {
+  display: block;
+  height: 0.9rem;
+  border-radius: 4px;
+  background: var(--color-line);
+}
+
+.placeholder-block--title {
+  width: 70%;
+  height: 2rem;
+  background: var(--color-ink-soft);
+  transform: rotate(-1.5deg);
+}
+
+.placeholder-block--line {
+  width: 90%;
+}
+
+.placeholder-block--short {
+  width: 55%;
+}
+
+.placeholder-block--button {
+  width: 8rem;
+  height: 2.5rem;
+  margin-top: 0.5rem;
+  border-radius: 6px;
+  background: var(--color-ink-soft);
+  transform: translateX(1.5rem);
+}
+
+.placeholder-caption {
+  margin-top: 0.75rem;
+  color: var(--color-ink-soft);
+  font-size: 0.75rem;
+}
+
+/* The refined placeholder is tidy: aligned, consistent radii, stronger hierarchy. */
+.placeholder-screen--refined {
+  background: var(--color-paper);
+}
+
+.placeholder-screen--refined .placeholder-block--title {
+  background: var(--color-ink);
+  transform: none;
+}
+
+.placeholder-screen--refined .placeholder-block--button {
+  border-radius: 999px;
+  background: var(--color-ink);
+  transform: none;
+}
+
+@media (max-width: 700px) {
+  .refinement-slider {
+    aspect-ratio: 4 / 5;
+  }
+
+  .refinement-label {
+    top: 0.75rem;
+    font-size: 0.75rem;
+  }
+}

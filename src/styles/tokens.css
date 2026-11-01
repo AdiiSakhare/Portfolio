@@ -1,0 +1,66 @@
+/* Design tokens taken directly from the Figma file (Page 3). */
+:root {
+  color-scheme: light;
+
+  /* Neutral styles defined in Figma */
+  --color-neutral-90: #1d1d1d;
+  --color-neutral-70: #565656;
+  --color-neutral-30: #d2d2d2;
+
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-text-muted: #94a3b9;
+  --color-heading-slate: #475569;
+  --color-link-slate: #70839e;
+  --color-subheading-blue: #6c96d3;
+  --color-button-charcoal: #343d4b;
+  --color-available: #12a76a;
+  --color-card-surface: #f9fbfc;
+  --color-contact-surface: #f8fafd;
+  --color-sticker: #ffb551;
+
+  --color-project-orange: #ff481d;
+  --color-project-blue: #2f54eb;
+
+  --color-tag-pink-background: #fff5fa;
+  --color-tag-pink-border: #ffcae4;
+  --color-tag-pink-text: #601c41;
+  --color-tag-green-background: #f9fff5;
+  --color-tag-green-border: #d8ffca;
+  --color-tag-green-text: #2e601c;
+  --color-tag-yellow-background: #fffcf5;
+  --color-tag-yellow-border: #fff1ca;
+  --color-tag-yellow-text: #a48736;
+
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-compact-nav: 'Inter', system-ui, sans-serif;
+  --font-pixel: 'Silkscreen', monospace;
+  --font-script: 'Protest Revolution', cursive;
+
+  /* Desktop frame is 1440 wide: 120px side padding leaves a 1200px content column. */
+  --header-height: 130px;
+  --section-padding-x: 120px;
+  --content-max-width: 1200px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-quick: 200ms;
+
+  /* Gentle ease-in-out used for the navigation sliding away and back. */
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-nav-slide: 900ms;
+}
+
+/* Tablet frame (834) */
+@media (max-width: 1199px) {
+  :root {
+    --header-height: 118px;
+    --section-padding-x: 40px;
+  }
+}
+
+/* Phone frame (360) */
+@media (max-width: 767px) {
+  :root {
+    --section-padding-x: 20px;
+  }
+}

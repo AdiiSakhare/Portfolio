@@ -1,0 +1,154 @@
+/* Figma: Desktop 26:185 / Tablet 26:348 / Phone 26:545 */
+.contact-section {
+  --sticker-overlap: -34px;
+  --sticker-width: 293.676px;
+  --sticker-height: 130.914px;
+  --sticker-frame-padding: 8px;
+  --sticker-frame-radius: 42px;
+  --sticker-pill-border: 1px;
+  --sticker-pill-padding: 14px 38px 20px;
+  --sticker-pill-radius: 34px;
+  --sticker-label-size: 44px;
+  --contact-title-size: 64px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 64px;
+  padding-block: 80px;
+  background: var(--color-contact-surface);
+}
+
+.contact-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-title-line {
+  font-weight: 700;
+  font-size: var(--contact-title-size);
+  color: #000000;
+  white-space: nowrap;
+}
+
+.contact-title-line:first-child,
+.stranger-sticker {
+  margin-bottom: var(--sticker-overlap);
+}
+
+/* The sticker is a tilted pill: an orange frame around an outlined orange pill. */
+.stranger-sticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sticker-width);
+  height: var(--sticker-height);
+}
+
+.stranger-sticker-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--sticker-frame-padding);
+  border-radius: var(--sticker-frame-radius);
+  background: var(--color-sticker);
+  transform: rotate(-3deg);
+}
+
+.stranger-sticker-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sticker-pill-padding);
+  box-shadow: inset 0 0 0 var(--sticker-pill-border) #000000;
+  border-radius: var(--sticker-pill-radius);
+  background: var(--color-sticker);
+  font-weight: 600;
+  font-size: var(--sticker-label-size);
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.contact-word-compact {
+  display: none;
+}
+
+.contact-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 89px;
+  font-size: 16px;
+  color: var(--color-link-slate);
+  white-space: nowrap;
+}
+
+.contact-links a {
+  transition: color var(--duration-quick) ease;
+}
+
+.contact-links a[href]:hover {
+  color: var(--color-neutral-90);
+}
+
+.contact-links a[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* Tablet: the headline says "chat" and the links spread across 552px. */
+@media (max-width: 1199px) {
+  .contact-section {
+    --sticker-overlap: -21.441px;
+    --sticker-width: 186.613px;
+    --sticker-height: 83.008px;
+    --sticker-frame-padding: 5.045px;
+    --sticker-frame-radius: 26.485px;
+    --sticker-pill-border: 0.631px;
+    --sticker-pill-padding: 8.828px 23.963px 12.612px;
+    --sticker-pill-radius: 21.441px;
+    --sticker-label-size: 28px;
+    --contact-title-size: 40px;
+
+    padding-block: 60px;
+  }
+
+  .contact-word-desktop {
+    display: none;
+  }
+
+  .contact-word-compact {
+    display: inline;
+  }
+
+  .contact-links {
+    justify-content: space-between;
+    width: min(552px, 100%);
+    gap: 0;
+    font-size: 14px;
+  }
+}
+
+/* Phone */
+@media (max-width: 767px) {
+  .contact-section {
+    --sticker-overlap: -16.469px;
+    --sticker-width: 135.329px;
+    --sticker-height: 59.626px;
+    --sticker-frame-padding: 3.875px;
+    --sticker-frame-radius: 20.345px;
+    --sticker-pill-border: 0.484px;
+    --sticker-pill-padding: 6px 18px 9px;
+    --sticker-pill-radius: 16.469px;
+    --sticker-label-size: 20px;
+    --contact-title-size: 30px;
+
+    gap: 40px;
+    padding-block: 32px;
+  }
+
+  .contact-links {
+    width: 100%;
+  }
+}

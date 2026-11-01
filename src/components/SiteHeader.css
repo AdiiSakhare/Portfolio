@@ -1,0 +1,145 @@
+/* Figma: Desktop 26:55 / Tablet 26:198 / Phone 26:395 */
+/*
+ * The header keeps its Figma height (20px + navigation + 20px) so the page layout never shifts,
+ * and sticks to the top while scrolling. Only the navigation itself receives clicks.
+ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: var(--header-height);
+  padding: 20px 120px 0;
+  pointer-events: none;
+}
+
+.main-navigation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+  /* Figma draws strokes inside the box, so the outline is an inset shadow that adds no size. */
+  box-shadow: inset 0 0 0 1px var(--color-neutral-30), 0 8px 32px rgba(29, 29, 29, 0);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
+  transition:
+    background-color 600ms var(--ease-smooth),
+    backdrop-filter 600ms var(--ease-smooth),
+    -webkit-backdrop-filter 600ms var(--ease-smooth),
+    box-shadow 600ms var(--ease-smooth);
+}
+
+/* Once the page is scrolled the bar turns to frosted glass and the availability row folds away. */
+.main-navigation--scrolled {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  box-shadow: inset 0 0 0 1px rgba(210, 210, 210, 0.7), 0 8px 32px rgba(29, 29, 29, 0.08);
+}
+
+.navigation-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 38px;
+  padding: 12px 26px;
+  color: var(--color-neutral-70);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.navigation-links a {
+  cursor: pointer;
+  transition: color var(--duration-quick) ease;
+}
+
+.navigation-links a:hover {
+  color: var(--color-neutral-90);
+}
+
+.navigation-links a[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* A one-row grid that animates from full height to zero, so the row folds away smoothly. */
+.availability-drawer {
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100%;
+  transition: grid-template-rows var(--duration-nav-slide) var(--ease-smooth);
+}
+
+.main-navigation--scrolled .availability-drawer {
+  grid-template-rows: 0fr;
+}
+
+.availability-status {
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 var(--color-neutral-30);
+  color: var(--color-available);
+  font-size: 14px;
+  white-space: nowrap;
+  transition: opacity var(--duration-nav-slide) var(--ease-smooth);
+}
+
+.main-navigation--scrolled .availability-status {
+  opacity: 0;
+}
+
+/* The padding lives here, not on the row above, so the row can collapse to nothing. */
+.availability-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.availability-dot {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Tablet and phone frames use Inter 12px for the navigation text. */
+@media (max-width: 1199px) {
+  .site-header {
+    padding: 20px 10px 0;
+  }
+
+  .navigation-links,
+  .availability-status {
+    font-family: var(--font-compact-nav);
+    font-size: 12px;
+    /* Figma's text box for Inter 12px is 15px tall. */
+    line-height: 15px;
+  }
+
+  .navigation-links {
+    gap: 37px;
+  }
+
+  .availability-dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-header {
+    padding: 20px 20px 0;
+  }
+
+  .main-navigation {
+    width: 100%;
+  }
+}

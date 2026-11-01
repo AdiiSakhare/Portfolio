@@ -1,0 +1,122 @@
+.prompt-editor {
+  padding: 14px 16px;
+  border-radius: 14px;
+  /* Rests 2.5% bigger than its natural size, scaling from the bottom edge so the gap below never changes. */
+  transform: scale(1.025);
+  transform-origin: 50% 100%;
+  transition:
+    transform 300ms var(--ease-out),
+    box-shadow var(--duration-quick) ease;
+}
+
+.prompt-editor:focus-within {
+  /* Grows while the visitor is writing, and returns to its resting size as soon as focus leaves. */
+  transform: scale(1.055);
+  box-shadow: var(--card-shadow), 0 0 0 2px rgba(47, 84, 235, 0.35);
+}
+
+.prompt-input {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-neutral-90);
+}
+
+/* The card's blue ring (above) is the focus indicator, so the text box needs no outline of its own. */
+.prompt-input:focus,
+.prompt-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.prompt-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.prompt-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.prompt-plus {
+  width: 22px;
+  font-size: 22px;
+  line-height: 1;
+  text-align: center;
+  color: var(--color-neutral-70);
+}
+
+.prompt-topics {
+  display: flex;
+  padding: 3px;
+  border-radius: 8px;
+  background: #f1f4f8;
+}
+
+.prompt-topic {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--color-neutral-70);
+  cursor: pointer;
+  transition: background-color var(--duration-quick) ease;
+}
+
+.prompt-topic--active {
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(29, 29, 29, 0.12);
+  color: var(--color-neutral-90);
+}
+
+.prompt-model {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+
+.prompt-model strong {
+  font-weight: 500;
+  color: var(--color-neutral-90);
+}
+
+.prompt-send {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-button-charcoal);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform var(--duration-quick) var(--ease-out);
+}
+
+.prompt-send:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 520px) {
+  .prompt-model {
+    display: none;
+  }
+
+  .prompt-send {
+    margin-left: auto;
+  }
+}

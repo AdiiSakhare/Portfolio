@@ -1,0 +1,75 @@
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 7vw, 7rem);
+}
+
+.about-text {
+  margin-top: 1.5rem;
+  max-width: 32rem;
+  color: var(--color-ink-soft);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+}
+
+.about-subheading {
+  margin: 2.5rem 0 1rem;
+  color: var(--color-ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.experience .about-subheading {
+  margin-top: 0;
+}
+
+.toolkit-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.experience-item {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.experience-item:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.experience-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.experience-role {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.experience-period {
+  color: var(--color-ink-soft);
+  font-size: 0.875rem;
+}
+
+.experience-company {
+  margin-top: 0.15rem;
+}
+
+.experience-summary {
+  margin-top: 0.5rem;
+  color: var(--color-ink-soft);
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 900px) {
+  .about-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,41 @@
+/* Design tokens: every colour, font and spacing value lives here. */
+:root {
+  color-scheme: light;
+
+  --color-paper: #ffffff;
+  --color-ink: #232323;
+  --color-ink-soft: #6b6b6b;
+  --color-line: #e7e7e7;
+  --color-surface: #f6f6f6;
+  --color-available: #16a34a;
+
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+
+  --page-gutter: clamp(1.25rem, 5vw, 4rem);
+  --content-max-width: 1440px;
+  --section-spacing: clamp(5.5rem, 11vw, 10rem);
+  --card-radius: 20px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-quick: 200ms;
+}
+
+/* Ultra-wide monitors get a wider canvas so the layout does not float in empty space. */
+@media (min-width: 1900px) {
+  :root {
+    --content-max-width: 1760px;
+    --page-gutter: 5rem;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-paper: #141414;
+  --color-ink: #ededed;
+  --color-ink-soft: #9a9a9a;
+  --color-line: #2c2c2c;
+  --color-surface: #1c1c1c;
+  --color-available: #4ade80;
+}

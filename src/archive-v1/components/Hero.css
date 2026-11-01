@@ -1,0 +1,123 @@
+.hero-section {
+  display: flex;
+  align-items: flex-end;
+  min-height: 100svh;
+  padding: 9rem var(--page-gutter) clamp(3rem, 7vw, 6rem);
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+}
+
+.hero-content {
+  position: relative;
+  width: 100%;
+}
+
+.hero-introduction {
+  margin-bottom: 1.5rem;
+  color: var(--color-ink-soft);
+  font-size: 0.9375rem;
+}
+
+.hero-heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.5rem, 11vw, 10rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+/* Each line is clipped so the text can slide up from behind it. */
+.heading-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.heading-line-text {
+  display: block;
+}
+
+.heading-line-text--soft {
+  color: var(--color-ink-soft);
+}
+
+.hero-details {
+  display: grid;
+  grid-template-columns: minmax(0, 34rem) auto;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+
+.hero-summary {
+  color: var(--color-ink-soft);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.button {
+  display: inline-block;
+  transition: opacity var(--duration-quick) ease, transform var(--duration-quick) var(--ease-out);
+}
+
+.button--solid {
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-weight: 500;
+}
+
+.button--solid:hover {
+  transform: translateY(-2px);
+}
+
+.button--text {
+  border-bottom: 1px solid var(--color-ink);
+  font-weight: 500;
+}
+
+.button--text:hover {
+  opacity: 0.6;
+}
+
+/* A small margin note, like a designer's markup on a printed proof. */
+.designer-note {
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--color-line);
+  color: var(--color-ink-soft);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 1900px) {
+  .hero-heading {
+    font-size: 12.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-details {
+    grid-template-columns: 1fr;
+  }
+
+  .designer-note {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-wrap: wrap;
+  }
+}

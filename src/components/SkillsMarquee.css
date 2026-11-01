@@ -1,0 +1,71 @@
+/* Figma: Desktop 26:80 / Tablet 26:224 / Phone 26:421 */
+.skills-marquee {
+  --marquee-gap: 40px;
+  --marquee-icon-size: 36.364px;
+  --marquee-font-size: 29.091px;
+  --marquee-line-height: 44px;
+  --marquee-padding-y: 18.182px;
+  --marquee-duration: 42s;
+
+  overflow: hidden;
+  background: #000000;
+}
+
+.skills-track {
+  display: flex;
+  width: max-content;
+  padding-block: var(--marquee-padding-y);
+  animation: skills-scroll var(--marquee-duration) linear infinite;
+}
+
+.skills-group {
+  display: flex;
+  align-items: center;
+  gap: var(--marquee-gap);
+  /* Trailing space equals the gap, so the repeated group joins up evenly. */
+  padding-inline-end: var(--marquee-gap);
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: var(--marquee-gap);
+  flex-shrink: 0;
+}
+
+.skill-icon {
+  width: var(--marquee-icon-size);
+  height: var(--marquee-icon-size);
+  flex-shrink: 0;
+}
+
+.skill-name {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: var(--marquee-font-size);
+  line-height: var(--marquee-line-height);
+  white-space: nowrap;
+}
+
+@keyframes skills-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1199px) {
+  .skills-marquee {
+    --marquee-gap: 22px;
+    --marquee-icon-size: 20px;
+    --marquee-font-size: 16px;
+    --marquee-line-height: 24px;
+    --marquee-padding-y: 10px;
+    --marquee-duration: 30s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-track {
+    animation: none;
+  }
+}
