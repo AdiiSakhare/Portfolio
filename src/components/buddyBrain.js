@@ -246,8 +246,13 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     Object.entries(eyes).forEach(([name, element]) => gsap.set(element, { autoAlpha: name === kind ? 1 : 0 }))
   }
 
-  /** A speech bubble. Over the frame it sits beside the bot, on whichever side has more room. */
-  const say = (text, hold = 1.4, { dots = true } = {}) => {
+  /** How long a message needs on screen to be read comfortably: a short beat to notice it, then about 12 characters a second. */
+  const readTime = (text) => 1.6 + text.length * 0.08
+
+  let speakingUntil = 0
+  let waitingMessage = null
+
+  const showBubble = (text, hold, dots) => {
     bubbleText.textContent = text
     bubbleDots.style.display = dots ? '' : 'none'
     anchor.dataset.side = currentX() > maxX() / 2 ? 'left' : 'right'
@@ -256,7 +261,29 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
       { autoAlpha: 0, scale: 0.6, y: 6 },
       { autoAlpha: 1, scale: 1, y: 0, duration: 0.25, ease: 'back.out(2)', overwrite: true },
     )
-    track(gsap.delayedCall(hold, () => gsap.to(bubble, { autoAlpha: 0, scale: 0.85, duration: 0.2, overwrite: true })))
+    const visibleFor = Math.max(hold, readTime(text))
+    speakingUntil = Date.now() + visibleFor * 1000
+    track(gsap.delayedCall(visibleFor, () => {
+      if (Date.now() >= speakingUntil - 50) gsap.to(bubble, { autoAlpha: 0, scale: 0.85, duration: 0.2, overwrite: true })
+    }))
+  }
+
+  /**
+   * A speech bubble. Over the frame it sits beside the bot, on whichever side has more room.
+   * A message stays long enough to be read, and the next one waits its turn (briefly) instead of replacing it.
+   */
+  const say = (text, hold = 1.4, { dots = true } = {}) => {
+    const waitMs = speakingUntil - Date.now()
+    waitingMessage?.kill()
+    waitingMessage = null
+    if (waitMs <= 0 || waitMs > 3500) {
+      showBubble(text, hold, dots)
+      return
+    }
+    waitingMessage = track(gsap.delayedCall(waitMs / 1000, () => {
+      waitingMessage = null
+      showBubble(text, hold, dots)
+    }))
   }
 
   // ---------- Always-on life: breathing, blinking, ear twitches, eyes that follow the mouse ----------
@@ -963,7 +990,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     await gsap.to(earRight, { rotation: -62, duration: 0.3, ease: 'back.out(2)', svgOrigin: EAR_RIGHT })
     for (const line of pick(LINES.phone)) {
       say(line, 1.7, { dots: false })
-      await sleep(1.8)
+      await sleep(readTime(line) + 0.5)
     }
   }
 
@@ -1011,7 +1038,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
       setEyes('normal')
       lookAt(random(-PUPIL_RANGE_X, PUPIL_RANGE_X), random(-PUPIL_RANGE_Y, 0))
       say(line, 2.2, { dots: false })
-      await sleep(2.3)
+      await sleep(readTime(line) + 0.5)
     }
   }
 
