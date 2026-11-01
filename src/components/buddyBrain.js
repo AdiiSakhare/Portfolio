@@ -72,6 +72,7 @@ const LINES = {
     spin: ['whee, can’t stop!', 'the world is spinning', 'talk later!'],
     phoneCall: ['shh, I’m on the phone', 'one sec, it’s the client', 'can you hold?'],
     shadowBox: ['not now, fighting bugs!', 'wait for round two', 'one-two, one-two'],
+    toolTalk: ['shh, I’m prompting', 'one sec, the agent is replying', 'context window is full!'],
     sit: ['hello from down here', 'I’m resting!', 'pull up a pixel'],
   },
 }
@@ -103,6 +104,32 @@ LINES.trip.push('mind the gap!', 'no stairs here?!')
 LINES.tripLie.push('trip, fall, repeat', 'floor: 1, bot: 0')
 LINES.tumble.push('barrel roll!', 'do a flip! (accidentally)')
 
+// Tool and AI jokes: Figma, MCP, plugins, prompts, design-to-code.
+LINES.thoughts.push(
+  ['should I connect another MCP?', 'my tool list is longer than my legs'],
+  ['Figma says 3 frames, code says 4', 'someone is lying, and it is a plugin'],
+  ['one more plugin won’t hurt…', 'narrator: it hurt'],
+  ['what if the AI designs the AI?', 'then who reviews the pixels?'],
+  ['prompt: “make it pop”', 'result: it popped. wrong way'],
+  ['auto layout or absolute?', 'auto layout, always. mostly.'],
+  ['detach instance?', 'no. never. well… maybe'],
+  ['tokens are not just for AI', 'design tokens count too'],
+  ['Figma to code in one click?', 'sure, and my legs grew back'],
+  ['is “vibe coding” a design brief?', 'asking for a friend'],
+)
+LINES.walk.push('MCP server connected. I think.', 'running an agent. it’s me.', 'loading plugin… loading…', 'context window: almost full', 'fetching design context…', 'tool call: walk()')
+LINES.jump.push('plugin installed without errors!', 'MCP connected on the first try!', 'the AI got it right!', 'handoff approved!')
+LINES.dance.push('♪ prompt, iterate, repeat ♫', '♪ auto-layout, auto-layout ♫', '♪ ctrl+z is my best friend ♫')
+LINES.look.push('hmm, which plugin did that?', 'is that a hallucination?', 'checking the layers panel…', 'someone renamed “Frame 482”')
+LINES.dreams.push('zzz… Frame 1, Frame 2, Frame 3…', 'zzz… 200 tabs open…', 'zzz… MCP… connected…')
+LINES.wake.push('did the AI ship it?!', 'who pushed to main?', 'my context window reset!')
+LINES.stretch.push('stretching my context window', 'ctrl+s, ctrl+s, ctrl+s')
+LINES.slip.push('whoa, a misaligned layer!', 'who moved my constraint?')
+LINES.tumble.push('rolling back to the last version!', 'undo! undo!')
+LINES.sneezeAfter.push('too many plugins in the air', 'that was a hallucination')
+LINES.pose.push('rendering at 2x!', 'export as SVG, please')
+LINES.hover = LINES.hover || []
+
 Object.assign(LINES, {
   // Hover: being petted like a cat.
   purr: ['purrrr…', 'that’s the spot', 'ahhh, yes', 'don’t stop', 'mmmmm', 'I could get used to this', 'best part of my day', 'purr.exe is running'],
@@ -120,6 +147,16 @@ Object.assign(LINES, {
     ['hello?', 'uh-huh…', 'yes, the blue one', 'no, the OTHER blue', 'will do. bye!'],
     ['hi, this is the portfolio', 'yes, he is available', 'no, he does not work for exposure', 'bye!'],
     ['standup? now?', 'I’ll be there in five', 'I’m always five minutes away'],
+  ],
+  toolTalk: [
+    ['Figma: “detached from main component”', 'me: “I felt that”'],
+    ['MCP server: “tool call failed”', 'me: “try turning it off and on”', 'MCP server: “connected!”', 'me: “I knew it”'],
+    ['plugin: “update available”', 'me: “not now”', 'plugin: “update available”', 'me: “…fine”'],
+    ['designer: “make it pop”', 'AI: “added 14 shadows”', 'designer: “less pop”'],
+    ['AI: “here’s your design!”', 'me: “why is the logo a cat?”', 'AI: “you said minimal”'],
+    ['dev: “is this in Figma?”', 'me: “it’s in Figma”', 'dev: “which frame?”', 'me: “…”'],
+    ['Claude Code: “I fixed the CSS”', 'me: “now it is centered?”', 'Claude Code: “now it is a div soup”'],
+    ['prompt v1: a button', 'prompt v7: a button with feelings', 'prompt v12: a button. just a button.'],
   ],
   box: ['rocky time!', 'fighting the blank canvas', 'one-two, one-two', 'shadow-boxing the bugs'],
   sit: ['sitting for a bit', 'break time', 'my legs are shorter now', 'just resting my pixels'],
@@ -965,6 +1002,19 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     await gsap.to(whole, { y: 0, duration: 0.4, ease: 'back.out(2)', svgOrigin: FEET })
   }
 
+  /** Brags about its toolbox: a short, nerdy design-and-AI conversation with itself. */
+  const toolTalk = async () => {
+    earsFree = false
+    trackingMouse = false
+    gsap.to(torso, { skewX: -3, duration: 0.3, svgOrigin: TORSO_PIVOT })
+    for (const line of pick(LINES.toolTalk)) {
+      setEyes('normal')
+      lookAt(random(-PUPIL_RANGE_X, PUPIL_RANGE_X), random(-PUPIL_RANGE_Y, 0))
+      say(line, 2.2, { dots: false })
+      await sleep(2.3)
+    }
+  }
+
   const actions = [
     { run: walk, weight: 4 },
     { run: run, weight: 1.5 },
@@ -989,6 +1039,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     { run: phoneCall, weight: 1 },
     { run: shadowBox, weight: 1 },
     { run: sit, weight: 1.2 },
+    { run: toolTalk, weight: 2 },
   ]
 
   const recent = []

@@ -364,6 +364,8 @@
 .canvas-doodle--arrow-photo {
   top: 20px;
   right: calc(clamp(24px, 3.5vw, 56px) + clamp(200px, 18.3vw, 261px) - 104px);
+  /* Above the photo and sticky note, so the whole arrow shows. */
+  z-index: 5;
 }
 
 /* A handwritten nudge beside the prompt editor. */
