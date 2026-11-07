@@ -23,7 +23,8 @@ let introTimes = null
 const INTRO = [
   { who: 'frame', text: 'hey HR! 👋', wave: true },
   { who: 'photo', text: 'hire him, he’s good' },
-  { who: 'frame', text: 'designs and codes!' },
+  { who: 'frame', text: 'he is a designer + dev. yes, both.' },
+  { who: 'frame', text: 'hire him.' },
   { who: 'photo', text: 'and he’s available 👀' },
 ]
 const planIntro = () => {
