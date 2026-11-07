@@ -16,9 +16,9 @@
 
 .introduction-text {
   width: 100%;
-  font-weight: 600;
-  font-size: 64px;
-  color: #000000;
+  font-weight: 500;
+  font-size: 48px;
+  color: var(--color-heading);
 }
 
 @media (max-width: 1199px) {
@@ -31,7 +31,7 @@
   }
 
   .introduction-text {
-    font-size: 34px;
+    font-size: 28px;
   }
 }
 
@@ -41,6 +41,6 @@
   }
 
   .introduction-text {
-    font-size: 24px;
+    font-size: 22px;
   }
 }

@@ -2,7 +2,39 @@ import { gsap } from '../hooks/gsapSetup'
 
 const WALK_SPEED_PX_PER_SECOND = 46
 const random = (min, max) => gsap.utils.random(min, max)
-const pick = (list) => list[Math.floor(Math.random() * list.length)]
+// Lines both bots have said recently. A line is skipped while it is still in here,
+// so the two bots never repeat each other (or themselves) back to back.
+const recentLines = []
+const lineKey = (item) => (Array.isArray(item) ? item[0] : item)
+const rememberLine = (text) => {
+  recentLines.push(text)
+  if (recentLines.length > 40) recentLines.shift()
+}
+const pick = (list) => {
+  const fresh = list.filter((item) => !recentLines.includes(lineKey(item)))
+  const options = fresh.length ? fresh : list
+  return options[Math.floor(Math.random() * options.length)]
+}
+
+// The opening conversation: four short, funny lines, so a visitor (usually a recruiter) is greeted
+// before the bots go back to random chatter. Gaps between lines are random; the bots keep moving meanwhile.
+let introOrigin = null
+let introTimes = null
+const INTRO = [
+  { who: 'frame', text: 'hey HR! 👋', wave: true },
+  { who: 'photo', text: 'hire him, he’s good' },
+  { who: 'frame', text: 'designs and codes!' },
+  { who: 'photo', text: 'and he’s available 👀' },
+]
+const planIntro = () => {
+  if (introTimes) return
+  let t = random(1, 2)
+  introTimes = INTRO.map(() => {
+    const at = t
+    t += random(2.8, 5)
+    return at
+  })
+}
 
 // What the bot says. Each pool is picked from at random, so the same moment rarely sounds the same twice.
 const LINES = {
@@ -207,6 +239,8 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     dizzy: one('.buddy-eyes-dizzy'),
     closed: one('.buddy-eyes-closed'),
   }
+  // Scale-only twin of eyes.normal (see ClaudeBuddy.jsx): blinks and squashes go here, never x/y.
+  const eyeScale = one('.buddy-eyes-scale')
 
   const maxX = () => Math.max(0, root.clientWidth - walker.offsetWidth)
 
@@ -272,7 +306,10 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
    * A speech bubble. Over the frame it sits beside the bot, on whichever side has more room.
    * A message stays long enough to be read, and the next one waits its turn (briefly) instead of replacing it.
    */
-  const say = (text, hold = 1.4, { dots = true } = {}) => {
+  const say = (text, hold = 1.4, { dots = true, intro = false } = {}) => {
+    // While the opening conversation is still going, the bot's own actions stay silent so the lines aren't talked over.
+    if (introTalking && inAction && !intro) return
+    rememberLine(text)
     const waitMs = speakingUntil - Date.now()
     waitingMessage?.kill()
     waitingMessage = null
@@ -310,6 +347,8 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
   let lastHoverAt = 0
   let wasOverBot = false
   let petting = false
+  let introTalking = true
+  let inAction = false
   let queuedTap = false
   let lastPointerX = 0
   let pressedAt = null
@@ -365,8 +404,8 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
       if (eyeKind !== 'normal' || petting) continue
       const blinks = Math.random() < 0.25 ? 2 : 1
       for (let blink = 0; blink < blinks; blink += 1) {
-        await gsap.to(eyes.normal, { scaleY: 0.08, duration: 0.07, svgOrigin: EYES })
-        await gsap.to(eyes.normal, { scaleY: 1, duration: 0.1, svgOrigin: EYES })
+        await gsap.to(eyeScale, { scaleY: 0.08, duration: 0.07, svgOrigin: EYES })
+        await gsap.to(eyeScale, { scaleY: 1, duration: 0.1, svgOrigin: EYES })
       }
     }
   }
@@ -429,7 +468,8 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     gsap.set(torso, { rotation: 0, skewX: 0, x: 0, y: 0, svgOrigin: TORSO_PIVOT })
     gsap.set(earLeft, { rotation: 0, svgOrigin: EAR_LEFT })
     gsap.set(earRight, { rotation: 0, svgOrigin: EAR_RIGHT })
-    gsap.set(eyes.normal, { x: 0, y: 0, scaleX: 1, scaleY: 1, svgOrigin: EYES })
+    gsap.set(eyes.normal, { x: 0, y: 0 })
+    gsap.set(eyeScale, { scaleX: 1, scaleY: 1, svgOrigin: EYES })
     gsap.set(shadow, { scaleX: 1, autoAlpha: 1, svgOrigin: GROUND })
     gsap.set([...stars, sweat], { autoAlpha: 0 })
     setEyes('normal')
@@ -571,13 +611,13 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     }
     // Startled awake.
     setEyes('normal')
-    gsap.to(eyes.normal, { scaleX: 1.2, scaleY: 1.25, duration: 0.1, svgOrigin: EYES })
+    gsap.to(eyeScale, { scaleX: 1.2, scaleY: 1.25, duration: 0.1, svgOrigin: EYES })
     say(pick(LINES.wake), 1.8, { dots: false })
     gsap.to(torso, { skewX: 0, duration: 0.2, svgOrigin: TORSO_PIVOT })
     earsTo(25, -25, 0.1)
     await gsap.to(whole, { y: -14, scaleY: 1.08, scaleX: 0.95, duration: 0.18, ease: 'power2.out', svgOrigin: FEET })
     await gsap.to(whole, { y: 0, scaleY: 1, scaleX: 1, duration: 0.5, ease: 'bounce.out', svgOrigin: FEET })
-    gsap.to(eyes.normal, { scaleX: 1, scaleY: 1, duration: 0.3, svgOrigin: EYES })
+    gsap.to(eyeScale, { scaleX: 1, scaleY: 1, duration: 0.3, svgOrigin: EYES })
     trackingMouse = true
     await sleep(0.3)
   }
@@ -588,7 +628,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     trackingMouse = false
     for (const [text, tilt] of [[LINES.sneezeBuild[0], -9], [LINES.sneezeBuild[1], -13]]) {
       say(text, 1, { dots: false })
-      gsap.to(eyes.normal, { scaleY: 0.5, duration: 0.3, svgOrigin: EYES })
+      gsap.to(eyeScale, { scaleY: 0.5, duration: 0.3, svgOrigin: EYES })
       await gsap.to(torso, { skewX: -tilt, duration: 0.5, ease: 'sine.inOut', svgOrigin: TORSO_PIVOT })
       await sleep(0.3)
     }
@@ -601,7 +641,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     await gsap.to(whole, { scaleX: 1, scaleY: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)', svgOrigin: FEET })
     await gsap.to(torso, { x: 2, duration: 0.05, yoyo: true, repeat: 7, svgOrigin: TORSO_PIVOT })
     earsTo(0, 0, 0.3)
-    gsap.to(eyes.normal, { scaleY: 1, duration: 0.2, svgOrigin: EYES })
+    gsap.to(eyeScale, { scaleY: 1, duration: 0.2, svgOrigin: EYES })
     setEyes('normal')
     say(pick(LINES.sneezeAfter), 2, { dots: false })
     await sleep(1.4)
@@ -617,7 +657,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     earsFree = false
     trackingMouse = false
     lookAt(0, PUPIL_RANGE_Y)
-    gsap.to(eyes.normal, { scaleX: 1.15, scaleY: 1.2, duration: 0.2, svgOrigin: EYES })
+    gsap.to(eyeScale, { scaleX: 1.15, scaleY: 1.2, duration: 0.2, svgOrigin: EYES })
     say(pick(LINES.edge), 2.6)
     gsap.to(sweat, { autoAlpha: 1, y: 4, duration: 0.5 })
     gsap.to(earLeft, { rotation: 20, duration: 0.08, yoyo: true, repeat: 15, svgOrigin: EAR_LEFT })
@@ -626,7 +666,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     await gsap.to(torso, { skewX: -direction * 7, duration: 0.12, yoyo: true, repeat: 7, ease: 'sine.inOut', svgOrigin: TORSO_PIVOT })
     await gsap.to(torso, { skewX: direction * 4, duration: 0.25, ease: 'power2.out', svgOrigin: TORSO_PIVOT })
     gsap.to(sweat, { autoAlpha: 0, duration: 0.3 })
-    gsap.to(eyes.normal, { scaleX: 1, scaleY: 1, duration: 0.3, svgOrigin: EYES })
+    gsap.to(eyeScale, { scaleX: 1, scaleY: 1, duration: 0.3, svgOrigin: EYES })
     await gsap.to(torso, { skewX: 0, duration: 0.3, svgOrigin: TORSO_PIVOT })
     say(pick(LINES.edgeAfter), 1.6, { dots: false })
     trackingMouse = true
@@ -726,7 +766,8 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
   // ---------- Poking: petted when hovered, knocked over when tapped ----------
   const resetFace = () => {
     setEyes('normal')
-    gsap.to(eyes.normal, { scaleX: 1, scaleY: 1, x: 0, y: 0, duration: 0.25, svgOrigin: EYES })
+    gsap.to(eyes.normal, { x: 0, y: 0, duration: 0.25 })
+    gsap.to(eyeScale, { scaleX: 1, scaleY: 1, duration: 0.25, svgOrigin: EYES })
     gsap.to(sweat, { autoAlpha: 0, duration: 0.3 })
     gsap.set(stars, { autoAlpha: 0 })
     earsTo(0, 0, 0.25)
@@ -759,7 +800,7 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
 
       say(pick(LINES.purr), 2.6, { dots: false })
       lookAt(0, -PUPIL_RANGE_Y)
-      gsap.to(eyes.normal, { scaleY: 0.55, duration: 0.5, svgOrigin: EYES })
+      gsap.to(eyeScale, { scaleY: 0.55, duration: 0.5, svgOrigin: EYES })
       earsTo(-14, 14, 0.6)
       gsap.to(torso, { skewX: leanTowardsPointer, duration: 0.6, ease: 'sine.out', svgOrigin: TORSO_PIVOT })
       gsap.to(whole, { scaleY: 0.95, scaleX: 1.03, duration: 1, ease: 'sine.inOut', svgOrigin: FEET })
@@ -785,7 +826,8 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
       gsap.set(torso, { x: 0 })
       petting = false
       setEyes('normal')
-      gsap.to(eyes.normal, { scaleY: 1, x: 0, y: 0, duration: 0.3, svgOrigin: EYES })
+      gsap.to(eyes.normal, { x: 0, y: 0, duration: 0.3 })
+      gsap.to(eyeScale, { scaleY: 1, duration: 0.3, svgOrigin: EYES })
       lookAt(0, 0)
       earsTo(0, 0, 0.3)
       gsap.to(torso, { skewX: 0, duration: 0.4, svgOrigin: TORSO_PIVOT })
@@ -1078,17 +1120,48 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     return options.find((action) => (roll -= action.weight) < 0) || options[0]
   }
 
+  /** Says this bot's share of the opening conversation while it carries on moving about. */
+  const introduce = async () => {
+    planIntro()
+    introOrigin = introOrigin ?? Date.now()
+    for (const [index, line] of INTRO.entries()) {
+      if (line.who !== placement) continue
+      const wait = introTimes[index] - (Date.now() - introOrigin) / 1000
+      if (wait > 0) await sleep(wait)
+      if (!alive) return
+      // If a visitor is already poking it, wait for the reaction to finish rather than talking over it.
+      while (reacting && alive) await sleep(0.2)
+      say(line.text, 3, { dots: false, intro: true })
+      if (line.wave && earsFree) {
+        earsTo(0, -70, 0.25)
+        await sleep(1)
+        if (earsFree) earsTo(0, 0, 0.3)
+      }
+    }
+    await sleep(3.2)
+    introTalking = false
+  }
+
+  const pickWalking = () => {
+    const strolls = actions.filter((action) => [walk, run, lookAround, jump, dance].includes(action.run) && !recent.includes(action.run))
+    return pick(strolls.length ? strolls : [actions[0]])
+  }
+
   const live = async () => {
     rest()
+    introduce()
     gsap.set(walker, { x: maxX() * random(0.1, 0.5) })
     await sleep(random(0.8, 1.6))
     while (alive) {
       while (reacting && alive) await sleep(0.15)
-      const action = pickAction()
+      // While the bots are introducing themselves they stroll about, so they are never just standing there talking.
+      const action = introTalking ? pickWalking() : pickAction()
       recent.push(action.run)
       if (recent.length > 3) recent.shift()
       currentName = action.run.name
+      inAction = true
       await action.run()
+      inAction = false
       if (!alive) break
       currentName = ''
       while (reacting && alive) await sleep(0.15)
@@ -1110,6 +1183,6 @@ export function startBuddy(root, { placement = 'photo' } = {}) {
     breathing.kill()
     legCycle.kill()
     pending.forEach((call) => call.kill())
-    gsap.killTweensOf([walker, whole, torso, earLeft, earRight, shadow, sweat, bubble, eyes.normal, ...legs, ...stars, ...pupils])
+    gsap.killTweensOf([walker, whole, torso, earLeft, earRight, shadow, sweat, bubble, eyes.normal, eyeScale, ...legs, ...stars, ...pupils])
   }
 }

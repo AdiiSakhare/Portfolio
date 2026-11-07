@@ -16,7 +16,8 @@
   align-items: center;
   gap: 64px;
   padding-block: 80px;
-  background: var(--color-contact-surface);
+  /* Solid, so the page's dot grid does not show through the footer. */
+  background-color: var(--color-contact-surface);
 }
 
 .contact-title {
@@ -29,7 +30,7 @@
 .contact-title-line {
   font-weight: 700;
   font-size: var(--contact-title-size);
-  color: #000000;
+  color: var(--color-heading);
   white-space: nowrap;
 }
 

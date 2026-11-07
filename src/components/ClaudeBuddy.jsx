@@ -38,11 +38,16 @@ export default function ClaudeBuddy({ placement = 'photo' }) {
               <rect className="buddy-ear-right buddy-fill" x="98" y="40" width="14" height="14" />
               <rect className="buddy-body buddy-fill" x="14" y="18" width="84" height="56" />
 
+              {/* The outer group only moves (look up, nudge); the inner one only scales (blink, squash).
+                  GSAP bakes pivot compensation into x/y when scaling, so sharing one element let a blink
+                  and a nudge fight and leave the eyes floating above the body. */}
               <g className="buddy-eyes-normal">
-                <rect x="28" y="30" width="7" height="14" fill="#ffffff" />
-                <rect x="77" y="30" width="7" height="14" fill="#ffffff" />
-                <rect className="buddy-pupil" x="29.7" y="33.8" width="3.6" height="6.4" />
-                <rect className="buddy-pupil" x="78.7" y="33.8" width="3.6" height="6.4" />
+                <g className="buddy-eyes-scale">
+                  <rect x="28" y="30" width="7" height="14" fill="#ffffff" />
+                  <rect x="77" y="30" width="7" height="14" fill="#ffffff" />
+                  <rect className="buddy-pupil" x="29.7" y="33.8" width="3.6" height="6.4" />
+                  <rect className="buddy-pupil" x="78.7" y="33.8" width="3.6" height="6.4" />
+                </g>
               </g>
               <g className="buddy-eyes-happy" opacity="0" visibility="hidden">
                 <path d="M28 31L38 38L28 45" />

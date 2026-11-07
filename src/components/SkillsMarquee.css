@@ -8,7 +8,7 @@
   --marquee-duration: 42s;
 
   overflow: hidden;
-  background: #000000;
+  background: var(--color-marquee-bg);
 }
 
 .skills-track {

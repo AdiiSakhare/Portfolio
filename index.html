@@ -9,6 +9,16 @@
       content="Adinath Sakhare (Adiii) is a UI/UX designer who designs SaaS products and websites, and uses AI tools with design judgment."
     />
 
+    <meta name="theme-color" content="#ffffff" />
+    <!-- Light is the default. Only a switch made earlier in this visit (e.g. before a refresh) is restored, before first paint. -->
+    <script>
+      try {
+        var dark = sessionStorage.getItem('theme') === 'dark'
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+        if (dark) document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0e1117')
+      } catch (e) {}
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

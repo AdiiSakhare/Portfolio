@@ -21,7 +21,7 @@
   width: 100%;
   font-weight: 500;
   font-size: 48px;
-  color: #000000;
+  color: var(--color-heading);
 }
 
 @media (max-width: 1199px) {

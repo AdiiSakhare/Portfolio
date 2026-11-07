@@ -9,9 +9,23 @@ html {
   background: var(--color-paper);
 }
 
+/* The dot grid is one fixed layer behind everything, so the dots stay put while content scrolls.
+   A fixed pseudo-element is used because background-attachment: fixed is ignored on iOS. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle at center, var(--dot-color) 1.1px, transparent 1.6px);
+  background-size: var(--dot-cell) var(--dot-cell);
+  /* Dots sit where the hero's grid lines cross (cell centre shifted by half a cell). */
+  background-position: calc(var(--dot-cell) / 2) calc(var(--dot-cell) / 2);
+}
+
 body {
   margin: 0;
-  background: var(--color-paper);
+  /* No background here: <html> paints the white. A body background would cover the fixed dot layer. */
   color: var(--color-ink);
   font-family: var(--font-body);
   /* Poppins' natural line height is 1.5; stated outright so emoji fallbacks cannot grow a line. */
@@ -109,4 +123,17 @@ html.lenis body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Added by useTheme for 400ms while switching theme, so colours fade instead of snapping. */
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 350ms ease,
+    color 350ms ease,
+    border-color 350ms ease,
+    fill 350ms ease,
+    stroke 350ms ease,
+    box-shadow 350ms ease !important;
 }

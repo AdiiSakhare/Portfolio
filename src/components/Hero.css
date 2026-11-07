@@ -3,13 +3,10 @@
  * and cards that float around it. Desktop uses absolute positions; phone stacks them.
  */
 .hero-canvas {
-  --canvas-blue: #2f54eb;
-  --card-shadow: 0 1px 2px rgba(29, 29, 29, 0.08), 0 14px 32px rgba(29, 29, 29, 0.1);
   /* The three logo stickers share one size, 10% smaller than before. */
   --logo-size: clamp(73px, 6.1vw, 91px);
 
   /* One plain grid: even 24px cells, like a design-tool canvas. */
-  --grid-line: rgba(52, 61, 75, 0.045);
   --grid-cell: 24px;
 
   position: relative;
@@ -61,7 +58,7 @@
 }
 
 .canvas-card {
-  background: #ffffff;
+  background: var(--color-surface);
   border-radius: 10px;
   box-shadow: var(--card-shadow);
 }
@@ -73,7 +70,7 @@
   width: clamp(520px, 44vw, 640px);
   padding: 40px 48px;
   border: 2px solid var(--canvas-blue);
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .frame-handle {
@@ -81,7 +78,7 @@
   width: 12px;
   height: 12px;
   border: 2px solid var(--canvas-blue);
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .frame-handle--top-left { top: -7px; left: -7px; }
@@ -109,7 +106,7 @@
   line-height: normal;
   letter-spacing: 0.006em;
   color: transparent;
-  background-image: linear-gradient(96.97deg, #c85133 0.455%, #c126cf 49.799%, #3d2dcd 99.143%);
+  background-image: var(--name-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   width: max-content;
@@ -309,7 +306,7 @@
   font-size: 26px;
   line-height: 1.15;
   text-align: center;
-  color: var(--color-neutral-90);
+  color: var(--color-on-sticker);
 }
 
 .photo-card {
@@ -436,12 +433,12 @@
 }
 
 .canvas-item--cursor-adinath {
-  /* Sits on top of the frame, with its tip on the bottom-left corner handle.
+  /* Sits in the empty space to the right of the frame's bottom-right corner handle.
      Dragging lifts a card to z-index 1000 and up, so cursors sit above that. */
   z-index: 100000;
-  /* A little away from the corner handle, so the arrow and label never sit on top of it. */
+  /* Clear of the corner handle and of the "You" cursor, so nothing overlaps. */
   bottom: calc(26% - 20px);
-  left: calc(50% - min(22vw, 320px) - 46px);
+  left: calc(50% + min(22vw, 320px) + 70px);
 }
 
 .canvas-cursor--you {

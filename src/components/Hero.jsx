@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import './Hero.css'
+import './ThemeSwitch.css'
 import adinathPhoto from '../assets/hero/adinath-photo.jpg'
 import arrowIcon from '../assets/figma/icon-arrow-right.svg'
 import resumeIcon from '../assets/figma/icon-resume.svg'
@@ -7,6 +8,7 @@ import PromptEditor from './PromptEditor'
 import ProcessCard from './ProcessCard'
 import LogoStickers from './LogoStickers'
 import ClaudeBuddy from './ClaudeBuddy'
+import ThemeSwitch from './ThemeSwitch'
 import { gsap, Draggable, defaultEase } from '../hooks/gsapSetup'
 import { scrollToSection } from '../hooks/useSmoothScroll'
 
@@ -17,14 +19,13 @@ const palette = [
   { name: 'sun', hex: '#FFB551' },
 ]
 
-const POINTER_DRIFT_PX = 18
-
 // Everything on the canvas that can be picked up and moved.
 const DRAGGABLE_SELECTORS = [
   '.canvas-item--process',
   '.canvas-item--logo',
   '.palette-chip',
   '.canvas-item--sticky',
+  '.canvas-item--theme',
   '.canvas-stack-item--photo',
   '.canvas-item--cursor-adinath',
   '.canvas-item--prompt',
@@ -70,7 +71,7 @@ export default function Hero() {
       }
     }, heroRef)
 
-    // Pointer motion: cards drift slightly at different depths and the "You" cursor follows the mouse.
+    // Pointer motion: only the "You" cursor follows the mouse. (Cards used to drift with it; switched off.)
     motionPreference.add(
       '(prefers-reduced-motion: no-preference) and (hover: hover) and (min-width: 1200px)',
       () => {
@@ -78,22 +79,11 @@ export default function Hero() {
         const stage = stageRef.current
         const you = stage.querySelector('.cursor-you')
 
-        const drifters = gsap.utils.toArray('[data-depth]', stage).map((element) => ({
-          depth: Number(element.dataset.depth),
-          moveX: gsap.quickTo(element, 'x', { duration: 1.2, ease: 'power3.out' }),
-          moveY: gsap.quickTo(element, 'y', { duration: 1.2, ease: 'power3.out' }),
-        }))
         const youX = gsap.quickTo(you, 'x', { duration: 0.6, ease: 'power3.out' })
         const youY = gsap.quickTo(you, 'y', { duration: 0.6, ease: 'power3.out' })
 
         const handlePointerMove = (event) => {
           const box = stage.getBoundingClientRect()
-          const normalizedX = (event.clientX - (box.left + box.width / 2)) / (box.width / 2)
-          const normalizedY = (event.clientY - (box.top + box.height / 2)) / (box.height / 2)
-          drifters.forEach(({ depth, moveX, moveY }) => {
-            moveX(-normalizedX * depth * POINTER_DRIFT_PX)
-            moveY(-normalizedY * depth * POINTER_DRIFT_PX)
-          })
           youX(event.clientX - box.left - you.offsetLeft)
           youY(event.clientY - box.top - you.offsetTop)
           // Over the prompt box the label would cover the text, so it steps aside.
@@ -102,10 +92,6 @@ export default function Hero() {
         }
 
         const handlePointerLeave = () => {
-          drifters.forEach(({ moveX, moveY }) => {
-            moveX(0)
-            moveY(0)
-          })
           youX(0)
           youY(0)
         }
@@ -136,6 +122,8 @@ export default function Hero() {
             activeCursor: 'grabbing',
             zIndexBoost: true,
             minimumMovement: 4,
+            // The theme switch is a button; it must still be draggable, and a click (no movement) still toggles it.
+            dragClickables: selector === '.canvas-item--theme',
             // A card lifts slightly while it is actually being dragged, and settles back afterwards.
             // (Clicking into the prompt box is not a drag, so it never triggers this.)
             onDragStart() {
@@ -229,6 +217,9 @@ export default function Hero() {
             <p className="sticky-note">clean · intuitive · human ✦</p>
           </div>
         </div>
+
+        {/* Easter egg: a draggable light/dark switch in the strip beside the navbar */}
+        <ThemeSwitch />
 
         {/* The photo, with the bot walking along its bottom edge */}
         <div className="canvas-stack">

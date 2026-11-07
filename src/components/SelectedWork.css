@@ -1,10 +1,10 @@
-/* Figma: Desktop 26:117 / Tablet 26:314 / Phone 26:511 */
+/* Work showcase: one bento grid per project, then title, description and tools used. */
 .selected-work-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 64px;
   padding-block: 80px;
 }
 
@@ -18,109 +18,164 @@
 .selected-work-heading {
   width: 100%;
   font-weight: 600;
-  font-size: 32px;
-  color: var(--color-heading-slate);
+  font-size: 34px;
+  color: var(--color-heading);
 }
 
 .selected-work-subheading {
   width: 100%;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--color-subheading-blue);
 }
 
 .project-list {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  flex-direction: column;
+  gap: 120px;
   width: 100%;
-}
-
-.project-list-item {
-  flex: 1 0 0;
-  min-width: 1px;
 }
 
 .project-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  overflow: clip;
-  border-radius: 16px;
+  gap: 28px;
+  width: 100%;
+  /* Makes the card the container for the cqw row heights below (a grid can't size itself by its own width). */
+  container-type: inline-size;
+}
+
+/* ---------- Bento grid ---------- */
+.bento {
+  /* Row height is a share of the card width, so every layout scales as one piece. */
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.bento-tile {
+  grid-area: var(--tile-area);
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
   background: var(--color-card-surface);
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+  /* Keeps the rounded clip stable while the image transforms inside. */
+  isolation: isolate;
 }
 
-.project-image {
+.bento-image {
+  display: block;
   width: 100%;
-  aspect-ratio: 1024 / 640;
-  height: auto;
+  height: 100%;
   object-fit: cover;
+  transition: transform 700ms var(--ease-out);
+  will-change: transform;
 }
 
-.project-content {
+/* Layout 1: two stacked tiles each side of one tall centre tile. */
+.bento--tall-centre {
+  grid-template-columns: 1fr 1.15fr 1fr;
+  grid-template-areas:
+    'a c d'
+    'a c d'
+    'a c d'
+    'b c e'
+    'b c e';
+  grid-auto-rows: 8cqw;
+}
+
+/* Layout 2: a wide lead tile, a tall tile and a mixed bottom row. */
+.bento--wide-left {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    'a a b c'
+    'a a b c'
+    'd e e c';
+  grid-auto-rows: 12cqw;
+}
+
+/* Layout 3: four tiles, one tall on the right. */
+.bento--offset-four {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'a a b'
+    'c d b';
+  grid-auto-rows: 22cqw;
+}
+
+/* Hover motion. Only on devices that really hover, so touch screens don't get stuck states. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .bento-tile--zoom:hover .bento-image {
+    transform: scale(1.1);
+  }
+
+  /* Rotating needs a little extra scale, or the tile corners would show empty gaps. */
+  .bento-tile--rotate:hover .bento-image {
+    transform: rotate(-4deg) scale(1.16);
+  }
+
+  .bento-tile--zoom-rotate:hover .bento-image {
+    transform: rotate(5deg) scale(1.28);
+  }
+}
+
+/* Touch screens have no hover, so a tile plays its effect while it is near the middle of the screen
+   (class set by useCenterActiveTiles). */
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .bento-tile--zoom.is-centred .bento-image {
+    transform: scale(1.1);
+  }
+
+  .bento-tile--rotate.is-centred .bento-image {
+    transform: rotate(-4deg) scale(1.16);
+  }
+
+  .bento-tile--zoom-rotate.is-centred .bento-image {
+    transform: rotate(5deg) scale(1.28);
+  }
+}
+
+/* ---------- Title, description and tools ---------- */
+.project-info {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
-  width: 100%;
-  padding: 20px;
+  justify-content: space-between;
+  gap: 48px;
 }
 
 .project-text {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 8px;
-  width: 100%;
+  max-width: 640px;
 }
 
 .project-title {
-  width: 100%;
-  font-weight: 500;
-  font-size: 26px;
-  color: var(--project-accent);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.15;
+  color: var(--color-heading);
 }
 
 .project-description {
-  width: 100%;
+  font-weight: 300;
   font-size: 16px;
   color: var(--color-neutral-70);
 }
 
-.project-tags {
+.project-tools-list {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  justify-content: flex-end;
   gap: 16px;
+  flex-shrink: 0;
 }
 
-.project-tag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 16px;
-  border-radius: 100px;
-  font-weight: 500;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.project-tag--pink {
-  background: var(--color-tag-pink-background);
-  box-shadow: inset 0 0 0 1px var(--color-tag-pink-border);
-  color: var(--color-tag-pink-text);
-}
-
-.project-tag--green {
-  background: var(--color-tag-green-background);
-  box-shadow: inset 0 0 0 1px var(--color-tag-green-border);
-  color: var(--color-tag-green-text);
-}
-
-.project-tag--yellow {
-  background: var(--color-tag-yellow-background);
-  box-shadow: inset 0 0 0 1px var(--color-tag-yellow-border);
-  color: var(--color-tag-yellow-text);
+.project-tool-logo {
+  display: block;
+  width: 44px;
+  height: 44px;
 }
 
 @media (max-width: 1199px) {
@@ -129,58 +184,100 @@
   }
 
   .selected-work-heading {
+    font-size: 30px;
+  }
+
+  .selected-work-subheading {
+    font-size: 16px;
+  }
+
+  .selected-work-section {
+    gap: 48px;
+  }
+
+  .project-list {
+    gap: 96px;
+  }
+
+  .bento {
+    gap: 12px;
+  }
+
+  .bento-tile {
+    border-radius: 16px;
+  }
+
+  .project-info {
+    gap: 32px;
+  }
+
+  .project-title {
+    font-size: 24px;
+  }
+
+  .project-description {
+    font-size: 15px;
+  }
+
+  .project-tool-logo {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Phone: two columns, the first tile spans the full width, tools sit under the text. */
+@media (max-width: 767px) {
+  .selected-work-heading {
     font-size: 26px;
   }
 
   .selected-work-subheading {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .project-list {
-    gap: 40px;
+    gap: 80px;
   }
 
-  .project-content {
-    padding: 16px;
+  .bento {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: none;
+    grid-auto-rows: 44cqw;
+    gap: 10px;
   }
 
-  .project-title {
-    font-size: 20px;
+  .bento-tile {
+    grid-area: auto;
+    border-radius: 14px;
   }
 
-  .project-description {
-    font-size: 14px;
-  }
-}
-
-/* Phone: the two cards stack. */
-@media (max-width: 767px) {
-  .selected-work-heading {
-    font-size: 24px;
+  .bento-tile:first-child,
+  /* A 4-tile layout would otherwise leave one tile alone in the last row. */
+  .bento-tile:last-child:nth-child(even) {
+    grid-column: 1 / -1;
   }
 
-  .project-list {
+  .project-info {
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    gap: 20px;
   }
 
-  .project-list-item {
-    flex: none;
-    width: 100%;
+  .project-tools-list {
+    justify-content: flex-start;
+    gap: 16px;
   }
 
   .project-title {
-    font-size: 18px;
+    font-size: 21px;
   }
 
   .project-description {
-    font-size: 13px;
-    /* Figma rounds this line height to 20px. */
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 22px;
   }
 
-  .project-tag {
-    font-size: 12px;
+  .project-tool-logo {
+    width: 36px;
+    height: 36px;
   }
 }
