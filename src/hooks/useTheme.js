@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
+import { playVenomTransition } from './venomTransition'
 
 const STORAGE_KEY = 'theme'
 const THEME_COLORS = { light: '#ffffff', dark: '#0e1117' }
@@ -15,21 +17,23 @@ export function useTheme() {
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[theme])
   }, [theme])
 
-  const toggleTheme = useCallback(() => {
-    const root = document.documentElement
-    // A short colour cross-fade, only while switching, so normal hover/scroll transitions are untouched.
-    root.classList.add('theme-transition')
-    window.setTimeout(() => root.classList.remove('theme-transition'), 400)
+  /** `origin` is where the ink effect starts, in viewport pixels (the switch's centre). */
+  const toggleTheme = useCallback((origin) => {
+    const next = readTheme() === 'dark' ? 'light' : 'dark'
 
-    setTheme((current) => {
-      const next = current === 'dark' ? 'light' : 'dark'
+    // Must finish synchronously: the browser takes its "after" snapshot as soon as this returns.
+    const applyTheme = () => {
+      document.documentElement.dataset.theme = next
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[next])
+      flushSync(() => setTheme(next))
       try {
         sessionStorage.setItem(STORAGE_KEY, next)
       } catch {
         // Private mode: the switch still works for this visit.
       }
-      return next
-    })
+    }
+
+    playVenomTransition(origin ?? { x: window.innerWidth / 2, y: 0 }, applyTheme)
   }, [])
 
   return { theme, toggleTheme }

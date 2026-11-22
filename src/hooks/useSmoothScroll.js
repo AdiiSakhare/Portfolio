@@ -25,14 +25,23 @@ export function useSmoothScroll() {
   }, [])
 }
 
-/** Scrolls to a section by id, smoothly through Lenis when it is running. */
-export function scrollToSection(sectionId) {
+/**
+ * Scrolls to a section by id, smoothly through Lenis when it is running.
+ * `immediate` jumps without animating (used when arriving from another page); `offset` leaves room for the sticky header.
+ */
+export function scrollToSection(sectionId, { immediate = false, offset = 0 } = {}) {
   const section = document.getElementById(sectionId)
   if (!section) return
 
   if (smoothScroller) {
-    smoothScroller.scrollTo(section, { duration: 1.2 })
+    smoothScroller.scrollTo(section, { duration: 1.2, immediate, offset })
   } else {
-    section.scrollIntoView({ behavior: 'auto' })
+    window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY + offset, behavior: 'auto' })
   }
+}
+
+/** Jumps to the top of the page, used when a new page opens. */
+export function scrollToTop() {
+  if (smoothScroller) smoothScroller.scrollTo(0, { immediate: true })
+  else window.scrollTo(0, 0)
 }

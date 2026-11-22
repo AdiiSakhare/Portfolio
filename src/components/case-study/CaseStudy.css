@@ -1,0 +1,815 @@
+/* Case-study page. Not in the Figma file yet, so sizes follow the home page's type scale
+   and tokens. Layout: sticky rail on the left (desktop), one reading column on the right. */
+
+.case-study {
+  --cs-radius: 24px;
+  --cs-rail-width: 190px;
+  --cs-section-gap: 112px;
+}
+
+.case-study--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-block: 80px 160px;
+}
+
+.cs-layout {
+  display: grid;
+  grid-template-columns: var(--cs-rail-width) minmax(0, 1fr);
+  gap: 56px;
+  padding-block: 16px 96px;
+}
+
+.cs-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-section-gap);
+  min-width: 0;
+}
+
+/* ---------- Rail ---------- */
+.cs-rail {
+  position: sticky;
+  top: calc(var(--header-height) + 8px);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cs-back {
+  align-self: flex-start;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--color-neutral-70);
+  transition: color var(--duration-quick) ease;
+}
+
+.cs-back:hover {
+  color: var(--color-heading);
+}
+
+.cs-back--inline {
+  display: none;
+}
+
+.cs-rail-list {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--color-neutral-30);
+}
+
+.cs-rail-link {
+  position: relative;
+  display: block;
+  padding: 7px 0 7px 16px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+  transition: color var(--duration-quick) ease;
+}
+
+/* The blue bar sits on top of the rail's grey line. */
+.cs-rail-link::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--color-project-blue);
+  transform: scaleY(0);
+  transition: transform 300ms var(--ease-out);
+}
+
+.cs-rail-link:hover {
+  color: var(--color-heading);
+}
+
+.cs-rail-link.is-active {
+  font-weight: 500;
+  color: var(--color-heading);
+}
+
+.cs-rail-link.is-active::before {
+  transform: scaleY(1);
+}
+
+/* ---------- Shared bits ---------- */
+.cs-eyebrow {
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-subheading-blue);
+}
+
+.cs-figure {
+  overflow: hidden;
+  border-radius: var(--cs-radius);
+  background: var(--color-card-surface);
+  box-shadow: inset 0 0 0 1px var(--color-hairline), 0 1px 2px rgba(29, 29, 29, 0.04), 0 18px 40px rgba(29, 29, 29, 0.06);
+  /* Fixed ratio so images loading late never shift the page (scroll-reveal positions depend on it). */
+  aspect-ratio: 16 / 10;
+}
+
+.cs-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Hero ---------- */
+.cs-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.cs-hero-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 820px;
+}
+
+.cs-hero-tags {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cs-category {
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: var(--color-badge-bg);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-project-blue);
+}
+
+.cs-hero-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.cs-hero-tools img {
+  width: 24px;
+  height: 24px;
+}
+
+.cs-title {
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--color-heading);
+}
+
+.cs-project-name {
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-text-muted);
+}
+
+.cs-summary {
+  max-width: 720px;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--color-neutral-70);
+}
+
+.cs-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px 32px;
+  margin: 0;
+  padding-block: 28px;
+  border-block: 1px solid var(--color-neutral-30);
+}
+
+.cs-stat dt {
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-heading);
+}
+
+.cs-stat--lead dt {
+  color: var(--color-project-blue);
+}
+
+.cs-stat dd {
+  max-width: 190px;
+  margin: 6px 0 0;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-neutral-70);
+}
+
+/* Sticky notes, same orange and handwriting as the canvas on the home page. */
+.cs-notes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  padding-block: 8px;
+}
+
+.cs-note {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 18px 20px;
+  background: var(--color-sticker);
+  box-shadow: 0 1px 2px rgba(29, 29, 29, 0.12), 0 12px 24px rgba(29, 29, 29, 0.12);
+  color: var(--color-on-sticker);
+}
+
+/* A strip of tape holds each note up. */
+.cs-note::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 56px;
+  height: 18px;
+  translate: -50% 0;
+  rotate: -2deg;
+  background: rgb(255 255 255 / 0.55);
+}
+
+.cs-note:nth-child(1) { rotate: -2.5deg; }
+.cs-note:nth-child(2) { rotate: 1.5deg; }
+.cs-note:nth-child(3) { rotate: -1deg; }
+.cs-note:nth-child(4) { rotate: 2.2deg; }
+
+.cs-note-label {
+  font-family: var(--font-script);
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.cs-note-value {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.cs-hero-figure {
+  aspect-ratio: 16 / 9;
+}
+
+/* ---------- Sections ---------- */
+.cs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  /* Clears the sticky navbar when a rail link scrolls here. */
+  scroll-margin-top: 100px;
+}
+
+.cs-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.cs-section-title {
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--color-heading);
+}
+
+.cs-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+
+.cs-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 700px;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-neutral-70);
+}
+
+.cs-intro {
+  font-size: 20px;
+}
+
+.cs-highlight {
+  max-width: 760px;
+  padding-left: 24px;
+  border-left: 3px solid var(--color-project-blue);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--color-heading);
+}
+
+/* ---------- Finding: one problem ---------- */
+.cs-finding {
+  display: flex;
+  flex-direction: column;
+  max-width: 820px;
+  margin: 0;
+  border-top: 1px solid var(--color-neutral-30);
+}
+
+.cs-finding-row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 24px;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--color-neutral-30);
+}
+
+.cs-finding dt {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.cs-finding-row:last-child dt {
+  color: var(--color-project-blue);
+}
+
+.cs-finding dd {
+  margin: 0;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--color-neutral-70);
+}
+
+.cs-quote {
+  position: relative;
+  max-width: 820px;
+  padding: 32px 36px;
+  border-radius: 20px;
+  background: var(--color-card-surface);
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+}
+
+.cs-quote blockquote {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.4;
+  color: var(--color-heading);
+}
+
+.cs-quote figcaption {
+  margin-top: 12px;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Process ---------- */
+.cs-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  /* A vertical rule ties the steps together and shows they are a sequence. */
+  padding-left: 32px;
+  border-left: 1px solid var(--color-neutral-30);
+}
+
+.cs-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cs-step::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: -37px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-project-blue);
+  box-shadow: 0 0 0 4px var(--color-paper);
+}
+
+.cs-step-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cs-step-number {
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.cs-step-label {
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: var(--color-badge-bg);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--color-project-blue);
+}
+
+.cs-step-title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.25;
+  color: var(--color-heading);
+}
+
+.cs-step-body {
+  max-width: 640px;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--color-neutral-70);
+}
+
+.cs-step .cs-figure {
+  margin-top: 12px;
+}
+
+/* ---------- Gallery ---------- */
+.cs-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cs-gallery-item--full {
+  grid-column: 1 / -1;
+}
+
+.cs-caption {
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- AI log ---------- */
+.cs-ai-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cs-ai-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--color-card-surface);
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+}
+
+.cs-ai-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cs-ai-logo {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.cs-ai-tool {
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.cs-ai-task {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--color-heading);
+}
+
+.cs-ai-prompt {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+  border-radius: 12px;
+  background: var(--color-surface-sunken);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--color-neutral-90);
+}
+
+.cs-ai-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+}
+
+.cs-ai-notes dt {
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-heading);
+}
+
+.cs-ai-notes dd {
+  margin: 0;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-neutral-70);
+}
+
+/* ---------- Outcome ---------- */
+.cs-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.cs-results li {
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--color-card-surface);
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+}
+
+.cs-result-value {
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--color-heading);
+}
+
+.cs-result-label {
+  margin-top: 4px;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--color-neutral-70);
+}
+
+.cs-learnings {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cs-learnings-title {
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--color-heading);
+}
+
+.cs-learnings li {
+  position: relative;
+  padding: 10px 0 10px 28px;
+  border-top: 1px solid var(--color-neutral-30);
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--color-neutral-70);
+}
+
+.cs-learnings li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-project-blue);
+}
+
+/* ---------- Next project ---------- */
+.cs-next {
+  padding-block: 64px 96px;
+}
+
+.cs-next-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 48px;
+  padding: 32px 40px;
+  border-radius: var(--cs-radius);
+  background: var(--color-card-surface);
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+}
+
+.cs-next-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cs-next-title {
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.1;
+  color: var(--color-heading);
+}
+
+.cs-next-title span {
+  display: inline-block;
+  transition: transform 400ms var(--ease-out);
+}
+
+.cs-next-figure img {
+  transition: transform 700ms var(--ease-out);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cs-next-link:hover .cs-next-title span {
+    transform: translateX(8px);
+  }
+
+  .cs-next-link:hover .cs-next-figure img {
+    transform: scale(1.06);
+  }
+}
+
+/* ---------- Tablet: the rail goes, the back link comes into the page ---------- */
+@media (max-width: 1199px) {
+  .case-study {
+    --cs-radius: 20px;
+    --cs-section-gap: 88px;
+  }
+
+  .cs-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-bottom: 64px;
+  }
+
+  .cs-rail {
+    display: none;
+  }
+
+  .cs-back--inline {
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+
+  .cs-hero {
+    gap: 40px;
+  }
+
+  .cs-title {
+    font-size: 52px;
+  }
+
+  .cs-summary {
+    font-size: 18px;
+  }
+
+  .cs-notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 18px;
+  }
+
+  .cs-section-title {
+    font-size: 32px;
+  }
+
+  .cs-next-title {
+    font-size: 36px;
+  }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 767px) {
+  .case-study {
+    --cs-radius: 16px;
+    --cs-section-gap: 64px;
+  }
+
+  .cs-layout {
+    padding-bottom: 40px;
+  }
+
+  .cs-hero {
+    gap: 32px;
+  }
+
+  .cs-title {
+    font-size: 38px;
+  }
+
+  .cs-summary {
+    font-size: 16px;
+  }
+
+  .cs-stat dt {
+    font-size: 34px;
+  }
+
+  .cs-note-label {
+    font-size: 21px;
+  }
+
+  .cs-section {
+    gap: 24px;
+  }
+
+  .cs-section-title {
+    font-size: 26px;
+  }
+
+  .cs-section-body {
+    gap: 28px;
+  }
+
+  .cs-prose,
+  .cs-step-body,
+  .cs-finding dd {
+    font-size: 16px;
+  }
+
+  .cs-intro {
+    font-size: 17px;
+  }
+
+  .cs-highlight {
+    padding-left: 16px;
+    font-size: 21px;
+  }
+
+  .cs-finding-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding-block: 16px;
+  }
+
+  .cs-quote {
+    padding: 22px;
+  }
+
+  .cs-quote blockquote {
+    font-size: 19px;
+  }
+
+  .cs-steps {
+    gap: 44px;
+    padding-left: 22px;
+  }
+
+  .cs-step::before {
+    left: -27px;
+  }
+
+  .cs-step-title {
+    font-size: 20px;
+  }
+
+  .cs-gallery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cs-ai-entry {
+    padding: 20px;
+  }
+
+  .cs-ai-notes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cs-next {
+    padding-block: 40px 64px;
+  }
+
+  .cs-next-link {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .cs-next-title {
+    font-size: 28px;
+  }
+}

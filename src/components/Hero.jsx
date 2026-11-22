@@ -82,25 +82,50 @@ export default function Hero() {
         const youX = gsap.quickTo(you, 'x', { duration: 0.6, ease: 'power3.out' })
         const youY = gsap.quickTo(you, 'y', { duration: 0.6, ease: 'power3.out' })
 
-        const handlePointerMove = (event) => {
+        // Listens on the window, not the hero: during the theme-switch transition the browser hands pointer
+        // events to the page root and fires a bogus "pointerleave" on the hero, which used to snap the
+        // "You" cursor back to its start. The last pointer position is also kept, so the cursor can be
+        // put back exactly where the mouse is once the transition ends, even if the mouse never moved.
+        let lastPointer = null
+
+        const syncCursor = () => {
+          if (!lastPointer) return
+          const { x, y } = lastPointer
+          const heroBox = hero.getBoundingClientRect()
+          const isInsideHero = x >= heroBox.left && x <= heroBox.right && y >= heroBox.top && y <= heroBox.bottom
+          if (!isInsideHero) {
+            youX(0)
+            youY(0)
+            return
+          }
           const box = stage.getBoundingClientRect()
-          youX(event.clientX - box.left - you.offsetLeft)
-          youY(event.clientY - box.top - you.offsetTop)
+          youX(x - box.left - you.offsetLeft)
+          youY(y - box.top - you.offsetTop)
           // Over the prompt box the label would cover the text, so it steps aside.
-          const isOverPrompt = Boolean(event.target.closest('.prompt-editor'))
+          const isOverPrompt = Boolean(document.elementFromPoint(x, y)?.closest('.prompt-editor'))
           gsap.to(you, { opacity: isOverPrompt ? 0 : 1, duration: 0.2, overwrite: 'auto' })
         }
 
-        const handlePointerLeave = () => {
+        const handlePointerMove = (event) => {
+          lastPointer = { x: event.clientX, y: event.clientY }
+          syncCursor()
+        }
+
+        // Only a real exit from the browser window resets the cursor.
+        const handleWindowLeave = (event) => {
+          if (event.relatedTarget) return
+          lastPointer = null
           youX(0)
           youY(0)
         }
 
-        hero.addEventListener('pointermove', handlePointerMove)
-        hero.addEventListener('pointerleave', handlePointerLeave)
+        window.addEventListener('pointermove', handlePointerMove, { passive: true })
+        document.documentElement.addEventListener('pointerleave', handleWindowLeave)
+        window.addEventListener('venom-transition-end', syncCursor)
         return () => {
-          hero.removeEventListener('pointermove', handlePointerMove)
-          hero.removeEventListener('pointerleave', handlePointerLeave)
+          window.removeEventListener('pointermove', handlePointerMove)
+          document.documentElement.removeEventListener('pointerleave', handleWindowLeave)
+          window.removeEventListener('venom-transition-end', syncCursor)
         }
       },
       heroRef,

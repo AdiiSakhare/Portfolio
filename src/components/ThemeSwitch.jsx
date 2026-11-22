@@ -15,7 +15,10 @@ export default function ThemeSwitch() {
             role="switch"
             aria-checked={isDark}
             aria-label="Dark mode"
-            onClick={toggleTheme}
+            onClick={(event) => {
+              const box = event.currentTarget.getBoundingClientRect()
+              toggleTheme({ x: box.left + box.width / 2, y: box.top + box.height / 2 })
+            }}
           >
             {/* Stars only show on the night track. */}
             <svg className="theme-switch-stars" viewBox="0 0 40 28" aria-hidden="true">

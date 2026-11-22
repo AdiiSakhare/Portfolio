@@ -17,7 +17,7 @@ export default function SelectedWork() {
 
       <ul className="project-list">
         {projects.map((project) => (
-          <li key={project.id} data-reveal>
+          <li key={project.id} id={project.id} data-reveal>
             <ProjectCard project={project} />
           </li>
         ))}

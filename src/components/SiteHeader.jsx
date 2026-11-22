@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './SiteHeader.css'
 import statusDotLarge from '../assets/figma/status-dot-large.svg'
 import statusDotSmall from '../assets/figma/status-dot-small.svg'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { scrollToSection } from '../hooks/useSmoothScroll'
 
 const navigationLinks = [
@@ -20,6 +21,8 @@ const getScrollPosition = () => window.scrollY || document.documentElement.scrol
 
 export default function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false)
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   // Any downward scroll, anywhere on the page, folds the availability row away.
   // It stays folded while scrolling back up, and returns only at the very top.
@@ -82,7 +85,9 @@ export default function SiteHeader() {
 
   const handleLinkClick = (event, sectionId) => {
     event.preventDefault()
-    scrollToSection(sectionId)
+    // On a case-study page the sections live on the home page, so go there first.
+    if (pathname !== '/') navigate('/', { state: { scrollTo: sectionId } })
+    else scrollToSection(sectionId)
   }
 
   return (

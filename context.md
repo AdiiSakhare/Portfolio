@@ -8,7 +8,7 @@ Newest entries go at the top of the Decision log. Never delete history; mark old
 - **What:** personal portfolio for Adinath Sakhare ("Adiii"), UI/UX designer. Frontend only, deployed to GitHub Pages.
 - **Stack:** Vite + React 19, GSAP (+ ScrollTrigger, Draggable), Lenis, plain CSS with design tokens (`src/styles/tokens.css`). No Tailwind.
 - **Design source:** Figma file `nw2arKxj55OydizYLOavz5` (Desktop 26:54, Tablet 26:197, Phone 26:394). Match its measurements exactly; never approximate from screenshots.
-- **Deploy:** `npm run deploy` (gh-pages), Vite `base: './'`. Dev server: `npm run dev -- --port 5173`.
+- **Deploy:** `npm run deploy` (gh-pages). Vite `base` is `/Portfolio/` for builds, `/` in dev (case-study pages have real URLs, so assets need absolute paths). `public/404.html` + a script in `index.html` redirect direct visits on GitHub Pages; on a custom domain set base to `/` and `pathSegmentsToKeep` to 0. Dev server: `npm run dev -- --port 5173`.
 - **Contact data:** `src/data/profile.js`. Projects: `src/data/projects.js`.
 
 ## Working rules
@@ -23,6 +23,7 @@ Newest entries go at the top of the Decision log. Never delete history; mark old
 - Breakpoints: desktop >=1200 (absolute canvas), tablet 768-1199 (some items hidden), phone <768 (stacked column, no dragging).
 - `src/components/Hero.jsx/.css`: canvas hero. `DRAGGABLE_SELECTORS` lists draggable items; the main frame is NOT draggable.
 - `src/components/buddyBrain.js`: Claude-bot behaviour engine (two bots: on the photo and on the main frame). `ClaudeBuddy.jsx` renders the SVG.
+- Routing: react-router. `/` = `src/pages/Home.jsx`, `/work/:projectId` = `src/pages/CaseStudyPage.jsx`. Case-study UI is in `src/components/case-study/` (hero, section blocks, next project, `CaseStudy.css`); content in `src/data/caseStudies.js` (a per-project list of typed sections: text, finding, process, gallery, ai-log, outcome; plus category, headline, stats, notes). `App.jsx` scrolls to top on a new page, or to `state.scrollTo` on home.
 - `src/components/SiteHeader.*`: glass navbar; the "Available for Work" row folds on scroll.
 - Archived, unused: `src/archive-v1/`.
 
@@ -30,6 +31,11 @@ Newest entries go at the top of the Decision log. Never delete history; mark old
 
 Format: `YYYY-MM-DD - decision (why)`.
 
+- 2026-11-22 - Theme switch now plays an ink/"venom" transition (ref video from user): `src/hooks/venomTransition.js` uses the View Transitions API. The new theme is revealed through a noise-shaped `clip-path` blob growing from the switch (fingered edge, old-theme specks left inside) with a second `venom-ink` layer on top (thin rim, branching black veins, flung droplets); paths are pre-baked keyframes with identical point counts so the browser interpolates them. Styles in `base.css` (`::view-transition-*`, `.venom-ink`). Falls back to the old 350ms crossfade without View Transitions or with reduced motion. 2s, gentle start, rounds off before leaving the screen. Preview pane quirk: the transition only runs while screenshots are being taken (otherwise "Document hidden" abort); scrub via `document.getAnimations()` pseudo-element animations. (user request)
+- 2026-11-22 - Ink transition: thread-like veins and branches removed (user: rest of the effect is fine). Now just the fingered flood edge, thin rim, flung droplets and old-theme specks.
+- 2026-11-22 - "You" cursor fix: it reset to its start spot on every theme switch because the browser fires a bogus `pointerleave` on the hero during a view transition, and nothing resynced it without a mouse move. Hero now tracks the pointer on `window`, resets only when the mouse truly leaves the window, and re-syncs on the `venom-transition-end` event. Rule: don't rely on element `pointerleave`/`pointerenter` around theme switches. (user bug report)
+- 2026-11-09 - Case-study pages built in code (not Figma PNGs): react-router with real URLs, editorial layout (sticky section label left, content right; stacked on tablet/phone). Process is NOT one fixed template: each project lists its own steps/names, plus an optional "Working with AI" block (prompt, what it produced, my call). All copy is placeholder until Adinath supplies real content; no case-study Figma frames yet, so type follows the home page scale. (user request; user chose react-router and story-and-process flow)
+- 2026-11-09 - Case-study layout reworked (inspired by anumehajain.space/work/canvas, not copied): sticky left rail with back link + active-section list (desktop only), big punchy headline + stats row + four orange sticky notes (role / worked with / goal / constraint, same orange and script font as the hero canvas), and a new `finding` block (what happened / why / why it mattered / user quote / image) for design-led projects. Stats and notes are placeholders until real numbers arrive. (user request)
 - 2026-11-07 - Bio text size now equals the Ethos quote (48 / 28 / 22px desktop / tablet / phone), weight 500 for both; deliberately departs from the Figma 64/34/24 for the bio. (user request)
 - 2026-11-07 - Bio (Introduction) text weight 600 -> 500 so it matches the Ethos quote (500). Sizes still differ (64 vs 48). (user request)
 - 2026-11-08 - Hero cards no longer drift with the mouse (parallax removed from `Hero.jsx`; the `canvas-drift` wrappers and `data-depth` attributes are now unused but harmless). The orange "You" cursor still follows the pointer. Dragging unaffected. (user request)

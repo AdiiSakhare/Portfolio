@@ -137,3 +137,41 @@ html.theme-transition *::after {
     stroke 350ms ease,
     box-shadow 350ms ease !important;
 }
+
+/* ---------- Venom theme switch (see hooks/venomTransition.js) ---------- */
+/* The browser's default cross-fade is replaced: the new page is revealed through an animated clip-path. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Until the script starts the animation, show none of the new page, so there is no one-frame flash. */
+::view-transition-new(root) {
+  clip-path: circle(0);
+}
+
+/* The ink layer: a full-screen dark sheet that is clipped down to veins, a rim and droplets. */
+.venom-ink {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: #0b0d12;
+  pointer-events: none;
+  view-transition-name: venom-ink;
+}
+
+::view-transition-old(venom-ink) {
+  display: none;
+}
+
+::view-transition-group(venom-ink),
+::view-transition-new(venom-ink) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(venom-ink) {
+  clip-path: circle(0);
+}

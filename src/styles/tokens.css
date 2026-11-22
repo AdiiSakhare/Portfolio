@@ -54,6 +54,7 @@
   --font-compact-nav: 'Inter', system-ui, sans-serif;
   --font-pixel: 'Silkscreen', monospace;
   --font-script: 'Protest Revolution', cursive;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Desktop frame is 1440 wide: 120px side padding leaves a 1200px content column. */
   --header-height: 130px;
